@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MASSINFIT</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="MASSINFIT, gimnasio abierto 24 horas los 365 días. Zona de crossfit, máquinas y mancuernas y cardio. Primer día de prueba gratis. Escríbenos por WhatsApp al 650 154 490.">
+<meta property="og:title" content="MASSINFIT · Gimnasio 24/7">
+<meta property="og:description" content="Entrena a cualquier hora: abierto 24 horas, 365 días. Crossfit, máquinas, mancuernas y cardio. Prueba un día gratis.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0d0c0b">
+<meta property="og:image" content="https://massinfit.vercel.app/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://massinfit.vercel.app/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: bandas a todo el ancho que alternan superficie; hero partido 7/5 con un disco de 20 kg como sello; acento verde MASSINFIT;
+   el horario usa el código de colores de los discos olímpicos para marcar la intensidad de cada clase. */
+:root{
+  --bg:#0d0c0b;
+  --surface:#161412;
+  --surface-2:#1f1c19;
+  --line:#2e2925;
+  --fg:#f3efe9;
+  --muted:#a39a8f;
+  --accent:#36e27c;
+  --accent-soft:rgba(54,226,124,.13);
+  --accent-ink:#03180b;
+  /* Discos olímpicos: 10 kg verde · 15 kg amarillo · 20 kg azul · 25 kg rojo */
+  --p10:#3fa34d; --p15:#e3bd1d; --p20:#3a78e0; --p25:#e0392f;
+  --f-display:'Big Shoulders Display', Impact, 'Arial Narrow', sans-serif;
+  --f-body:'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono:'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --radius:6px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+a{color:inherit}
+img{max-width:100%}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1200px;margin-inline:auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.band{padding-block:clamp(72px,10vw,128px)}
+.band--alt{background:var(--surface)}
+.eyebrow{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin:0 0 18px}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--accent)}
+h1,h2,h3{font-family:var(--f-display);text-transform:uppercase;line-height:.9;margin:0;text-wrap:balance;letter-spacing:.005em}
+h2{font-size:clamp(44px,6.4vw,82px);font-weight:900}
+h3{font-size:28px;font-weight:800;line-height:1}
+.lead{color:var(--muted);font-size:clamp(17px,1.5vw,19px);max-width:56ch;margin:20px 0 0}
+.sec-head{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:clamp(36px,5vw,56px)}
+.sec-head > div{min-width:0}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--f-body);font-weight:600;font-size:16px;text-decoration:none;padding:15px 24px;border-radius:var(--radius);border:1.5px solid transparent;cursor:pointer;transition:transform .15s ease, background .15s ease, border-color .15s ease;white-space:nowrap}
+.btn svg{width:20px;height:20px;flex:none}
+.btn--primary{background:var(--accent);color:var(--accent-ink)}
+.btn--primary:hover{background:#5ef097;transform:translateY(-1px)}
+.btn--ghost{border-color:var(--line);color:var(--fg);background:transparent}
+.btn--ghost:hover{border-color:var(--fg)}
+.btn--block{width:100%}
+
+/* Cabecera */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(13,12,11,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:24px;height:72px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-weight:900;font-size:27px;text-transform:uppercase;letter-spacing:.02em;line-height:1}
+.logo-mark{width:30px;height:30px;border-radius:50%;flex:none;background:radial-gradient(circle, var(--bg) 0 18%, var(--accent) 18% 30%, var(--bg) 30% 36%, var(--accent) 36%)}
+.nav{display:flex;gap:4px;margin-left:auto}
+.nav a{text-decoration:none;color:var(--muted);font-weight:500;font-size:15px;padding:8px 14px;border-radius:var(--radius)}
+.nav a:hover{color:var(--fg);background:var(--surface-2)}
+.top .btn{padding:11px 18px;font-size:15px}
+.menu-btn{display:none;margin-left:auto;background:none;border:1px solid var(--line);color:var(--fg);border-radius:var(--radius);width:44px;height:44px;cursor:pointer;align-items:center;justify-content:center}
+.menu-btn svg{width:22px;height:22px}
+
+/* Hero */
+.hero{padding-block:clamp(40px,6vw,80px) clamp(56px,7vw,96px)}
+.hero .wrap{display:grid;grid-template-columns:7fr 5fr;gap:clamp(32px,5vw,64px);align-items:center}
+.hero-copy{min-width:0}
+.hero h1{font-size:clamp(68px,11.5vw,160px);font-weight:900;line-height:.84}
+.hero h1 .out{color:transparent;-webkit-text-stroke:2px var(--accent);display:block}
+.hero .lead{margin-top:28px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.stats{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:clamp(20px,4vw,48px);margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.stat b{display:block;font-family:var(--f-display);font-size:40px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:14px;color:var(--muted)}
+.hero-visual{position:relative;min-width:0}
+.hero-visual .foto{aspect-ratio:4/5}
+
+/* Huecos de foto: se rellenan desde GYM.fotos */
+.foto{position:relative;overflow:hidden;border-radius:var(--radius);background:
+  radial-gradient(110% 70% at 85% 0%, rgba(54,226,124,.24), transparent 60%),
+  linear-gradient(165deg,#25201c 0%,#141210 70%);
+  background-size:cover;background-position:center;max-width:100%}
+.foto::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 14px);pointer-events:none}
+.foto .pict{position:absolute;inset:0;display:grid;place-items:center;color:#3b342e}
+.foto .pict svg{width:34%;max-width:130px;height:auto}
+.foto .etq{position:absolute;left:12px;bottom:12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:rgba(13,12,11,.72);padding:5px 9px;border-radius:3px}
+.foto.has-img::before,.foto.has-img .pict,.foto.has-img .etq{display:none}
+
+.plate{position:absolute;left:clamp(-56px,-4vw,-24px);bottom:clamp(-44px,-3vw,-20px);width:clamp(132px,15vw,196px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle, var(--bg) 0 10%, #3a342f 10% 12%, #191715 12% 34%, #2a2622 34% 35.5%, #191715 35.5% 66%, #2a2622 66% 67.5%, #121110 67.5% 100%);
+  box-shadow:0 18px 40px rgba(0,0,0,.6), inset 0 0 0 3px #0a0908;display:grid;place-items:center;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.plate span{position:absolute;font-family:var(--f-display);font-weight:900;color:var(--accent);line-height:1}
+.plate .kg{top:14%;font-size:clamp(20px,2.2vw,28px);letter-spacing:.04em}
+.plate .nm{bottom:15%;font-family:var(--f-mono);font-weight:500;font-size:9.5px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.hero-visual:hover .plate{transform:rotate(-40deg)}
+
+/* Cinta */
+.ribbon{background:var(--accent);color:var(--accent-ink);overflow:hidden;border-block:1px solid #6cf2a0}
+.ribbon-track{display:flex;width:max-content;animation:slide 38s linear infinite}
+.ribbon-track span{font-family:var(--f-display);font-weight:900;font-size:clamp(22px,2.6vw,32px);text-transform:uppercase;padding:14px 0;white-space:nowrap;display:flex;align-items:center}
+.ribbon-track span::after{content:"";width:12px;height:12px;border-radius:50%;border:3px solid var(--accent-ink);margin-inline:28px}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* Instalaciones */
+.zones{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,24px)}
+.zone{display:flex;flex-direction:column;gap:16px;min-width:0}
+.zone .foto{aspect-ratio:4/3}
+.zone h3{display:flex;align-items:baseline;gap:12px}
+.zone h3 small{font-family:var(--f-mono);font-size:12px;font-weight:400;color:var(--accent);letter-spacing:.08em}
+.zone p{margin:0;color:var(--muted);font-size:16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em;padding:4px 9px;border:1px solid var(--line);border-radius:3px;color:var(--fg)}
+
+/* Horario */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.disc{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 3px rgba(0,0,0,.35)}
+.days{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:20px;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.day{flex:1 0 auto;min-width:76px;font-family:var(--f-display);font-weight:800;font-size:20px;text-transform:uppercase;background:var(--surface-2);color:var(--muted);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;cursor:pointer;line-height:1}
+.day small{display:block;font-family:var(--f-mono);font-weight:400;font-size:10.5px;letter-spacing:.08em;margin-top:6px}
+.day[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.day:hover:not([aria-selected="true"]){color:var(--fg)}
+.sched{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:92px 1fr auto auto;gap:16px 24px;align-items:center;padding:18px 4px;border-bottom:1px solid var(--line)}
+.row time{font-family:var(--f-mono);font-size:17px;font-variant-numeric:tabular-nums;color:var(--fg)}
+.row .cl{min-width:0}
+.row .cl b{display:block;font-family:var(--f-display);font-weight:800;font-size:26px;text-transform:uppercase;line-height:1}
+.row .cl span{font-size:14px;color:var(--muted)}
+.row .dur{font-family:var(--f-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.int{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;padding:6px 12px 6px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);white-space:nowrap}
+.sched-note{margin:18px 0 0;font-size:14px;color:var(--muted)}
+
+/* Entrenamiento personal */
+.pt{display:grid;grid-template-columns:5fr 6fr;gap:clamp(32px,6vw,80px);align-items:center}
+.pt > div{min-width:0}
+.pt .foto{aspect-ratio:1/1}
+.steps{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:0;counter-reset:s}
+.steps li{display:grid;grid-template-columns:48px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--line);counter-increment:s}
+.steps li::before{content:counter(s, decimal-leading-zero);font-family:var(--f-mono);font-size:13px;color:var(--accent);padding-top:3px}
+.steps b{display:block;font-weight:600}
+.steps span{color:var(--muted);font-size:15.5px}
+.pt-price{display:flex;flex-wrap:wrap;align-items:center;gap:20px 28px;margin-top:32px}
+.pt-price p{margin:0;color:var(--muted);font-size:15px}
+.pt-price p b{display:block;font-family:var(--f-display);font-size:44px;line-height:1;color:var(--fg);font-weight:900}
+
+/* Tarifas */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,24px);align-items:stretch}
+.plan{display:flex;flex-direction:column;gap:22px;padding:clamp(24px,3vw,34px);border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);min-width:0;position:relative}
+.plan--top{border-color:var(--accent);background:linear-gradient(180deg,var(--accent-soft),transparent 55%), var(--bg)}
+.plan .tag{position:absolute;top:-12px;left:clamp(24px,3vw,34px);background:var(--accent);color:var(--accent-ink);font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:3px;font-weight:500}
+.plan h3{font-size:30px}
+.price{display:flex;align-items:baseline;gap:6px;font-variant-numeric:tabular-nums}
+.price b{font-family:var(--f-display);font-weight:900;font-size:76px;line-height:.85}
+.price span{color:var(--muted);font-size:15px}
+.per{margin:-12px 0 0;font-family:var(--f-mono);font-size:13px;color:var(--accent)}
+.plan ul{list-style:none;padding:0;margin:0;display:grid;gap:10px;flex:1}
+.plan li{display:grid;grid-template-columns:20px 1fr;gap:10px;font-size:15.5px}
+.plan li::before{content:"";width:9px;height:9px;margin-top:8px;border-radius:50%;border:2px solid var(--accent)}
+.plans-foot{margin:28px 0 0;color:var(--muted);font-size:14.5px}
+
+/* FAQ */
+.faq{display:grid;grid-template-columns:4fr 7fr;gap:clamp(32px,6vw,80px)}
+.faq > div{min-width:0}
+details{border-top:1px solid var(--line)}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;padding:22px 44px 22px 0;font-weight:600;font-size:18px;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";position:absolute;right:6px;top:50%;width:14px;height:14px;margin-top:-7px;background:linear-gradient(var(--accent),var(--accent)) center/14px 2px no-repeat, linear-gradient(var(--accent),var(--accent)) center/2px 14px no-repeat;transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:0 0 22px;color:var(--muted);max-width:62ch}
+
+/* Contacto */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px)}
+.contact > div{min-width:0}
+.info{display:grid;gap:0;margin-top:32px}
+.info-row{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--line);align-items:start}
+.info-row > span{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:4px}
+.info-row div{min-width:0}
+.info-row strong{font-weight:600;font-size:18px}
+.phone{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.phone a{font-family:var(--f-display);font-size:34px;font-weight:800;text-decoration:none;line-height:1;font-variant-numeric:tabular-nums;user-select:all}
+.copy{background:none;border:1px solid var(--line);color:var(--muted);font-family:var(--f-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border-radius:3px;cursor:pointer}
+.copy:hover{color:var(--fg);border-color:var(--fg)}
+.hours{width:100%;border-collapse:collapse;font-size:16px}
+.hours td{padding:3px 0}
+.hours td:last-child{text-align:right;font-family:var(--f-mono);font-size:14.5px;font-variant-numeric:tabular-nums}
+.hours tr.today td{color:var(--accent);font-weight:600}
+.contact-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.form{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(24px,3.5vw,40px);display:grid;gap:18px;align-content:start}
+.form h3{font-size:34px}
+.form > p{margin:-6px 0 4px;color:var(--muted);font-size:15.5px}
+.field{display:grid;gap:7px}
+.field label{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select,.field textarea{width:100%;font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px}
+.field textarea{resize:vertical;min-height:90px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.preview{font-size:14px;color:var(--muted);background:var(--bg);border:1px dashed var(--line);border-radius:var(--radius);padding:12px 14px;white-space:pre-wrap;margin:0}
+.legal-note{font-size:12.5px;color:var(--muted);margin:0}
+
+/* Pie */
+.foot{border-top:1px solid var(--line);padding-block:48px 40px}
+.foot .wrap{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end}
+.foot-big{font-family:var(--f-display);font-weight:900;font-size:clamp(56px,10vw,128px);line-height:.82;text-transform:uppercase;color:var(--surface-2);-webkit-text-stroke:1px var(--line);margin:0 0 20px}
+.foot nav{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:14px}
+.foot nav a{color:var(--muted);text-decoration:none}
+.foot nav a:hover{color:var(--fg)}
+.foot small{color:var(--muted);font-size:13px}
+
+/* Botón flotante de WhatsApp */
+.fab{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:70;display:flex;align-items:center;gap:10px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:15px;text-decoration:none;padding:14px 20px 14px 16px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.fab svg{width:24px;height:24px}
+.fab:hover{transform:translateY(-2px)}
+.demo{position:fixed;left:calc(14px + env(safe-area-inset-left,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:69;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--surface-2);color:var(--muted);border:1px solid var(--line);padding:6px 10px;border-radius:3px}
+
+/* Responsive */
+@media (max-width: 980px){
+  .nav,.top .btn{display:none}
+  .menu-btn{display:inline-flex}
+  .top.open .nav{display:flex;position:absolute;top:72px;left:0;right:0;flex-direction:column;gap:0;background:var(--bg);border-bottom:1px solid var(--line);padding:8px max(16px, env(safe-area-inset-right, 0px)) 16px max(16px, env(safe-area-inset-left, 0px))}
+  .top.open .nav a{padding:14px 4px;font-size:18px;border-bottom:1px solid var(--line);border-radius:0}
+  .hero .wrap{grid-template-columns:1fr}
+  .hero-visual .foto{aspect-ratio:16/11}
+  .plate{left:auto;right:-14px;bottom:-30px}
+  .zones{grid-template-columns:repeat(2,1fr)}
+  .pt,.faq,.contact{grid-template-columns:1fr}
+  .plans{grid-template-columns:1fr;max-width:520px}
+}
+@media (max-width: 640px){
+  body{font-size:16px}
+  .zones{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,1fr);gap:12px}
+  .stat b{font-size:30px}
+  .stat span{font-size:12.5px}
+  .sec-head{grid-template-columns:1fr}
+  .row{grid-template-columns:64px 1fr;gap:6px 14px}
+  .row time{font-size:15px;grid-row:span 2;align-self:start;padding-top:3px}
+  .row .dur{display:none}
+  .row .int{justify-self:start}
+  .two{grid-template-columns:1fr}
+  .info-row{grid-template-columns:1fr;gap:6px}
+  .foot .wrap{grid-template-columns:1fr}
+  .fab span{display:none}
+  .fab{padding:15px}
+  .ctas .btn{flex:1 1 100%}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .ribbon-track{animation:none}
+  .plate,.btn,.fab{transition:none}
+}
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Inicio"><span class="logo-mark" aria-hidden="true"></span><span data-g="nombre">MASSINFIT</span></a>
+    <nav class="nav" id="nav" aria-label="Principal">
+      <a href="#instalaciones">Instalaciones</a>
+      <a href="#horario">Clases</a>
+      <a href="#personal">Entrenador personal</a>
+      <a href="#tarifas">Tarifas</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a class="btn btn--primary" data-wa="Hola, quiero información sobre el gimnasio." href="#contacto" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>
+      Escríbenos
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow"><span data-g="lema">Gimnasio y centro de entrenamiento</span></p>
+        <h1>Fuerza que <span class="out">se nota</span></h1>
+        <p class="lead">Abierto 24 horas, los 365 días del año. Zona de crossfit, máquinas y mancuernas y cardio para que entrenes cuando a ti te venga bien. Ven a probar sin compromiso.</p>
+        <div class="ctas">
+          <a class="btn btn--primary" data-wa="Hola, me gustaría reservar mi día de prueba gratis." href="#contacto" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>
+            Reserva tu día de prueba
+          </a>
+          <a class="btn btn--ghost" href="#tarifas">Ver tarifas</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>24/7</b><span>abierto todos los días</span></div>
+          <div class="stat"><b>365</b><span>días al año, festivos incluidos</span></div>
+          <div class="stat"><b>1.º día</b><span>de prueba gratis</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="foto" data-foto="portada" role="img" aria-label="Sala principal del gimnasio">
+          <div class="pict"><svg viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 30h108"/><rect x="18" y="10" width="10" height="40" rx="2"/><rect x="30" y="16" width="7" height="28" rx="2"/><rect x="92" y="10" width="10" height="40" rx="2"/><rect x="83" y="16" width="7" height="28" rx="2"/></svg></div>
+          <span class="etq">Foto · portada</span>
+        </div>
+        <div class="plate" aria-hidden="true"><span class="kg">20 KG</span><span class="nm" data-g="nombre">MASSINFIT</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ribbon" aria-hidden="true">
+    <div class="ribbon-track" id="ribbon"></div>
+  </div>
+
+  <section class="band" id="instalaciones">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">Instalaciones</p>
+          <h2>Tres zonas para entrenar a tu manera</h2>
+        </div>
+        <a class="btn btn--ghost" data-wa="Hola, me gustaría visitar las instalaciones antes de apuntarme." href="#contacto" target="_blank" rel="noopener">Pide una visita</a>
+      </div>
+      <div class="zones" id="zones"></div>
+    </div>
+  </section>
+
+  <section class="band band--alt" id="horario">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">Clases de crossfit</p>
+          <h2>Horario de clases</h2>
+          <p class="lead">El gimnasio está abierto 24 horas. Estas son las sesiones guiadas en la zona de crossfit. La intensidad se marca con el color del disco, como en la sala.</p>
+        </div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="days" role="tablist" aria-label="Día de la semana" id="days"></div>
+      <div class="sched" role="tabpanel" id="sched" aria-live="polite"></div>
+      <p class="sched-note">Plazas limitadas: reserva tu sitio por WhatsApp. Fuera de estas horas puedes entrenar por tu cuenta en cualquier zona.</p>
+    </div>
+  </section>
+
+  <section class="band" id="personal">
+    <div class="wrap pt">
+      <div>
+        <div class="foto" data-foto="personal" role="img" aria-label="Entrenador personal con un cliente">
+          <div class="pict"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M22 18a8 8 0 0 1 16 0"/><path d="M18 22h24l4 28a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4z"/></svg></div>
+          <span class="etq">Foto · entrenamiento personal</span>
+        </div>
+      </div>
+      <div>
+        <p class="eyebrow">Entrenamiento personal</p>
+        <h2>Un plan hecho para ti</h2>
+        <p class="lead">Para perder peso, ganar fuerza, preparar unas oposiciones o volver a entrenar después de una lesión. Te acompañamos en cada sesión.</p>
+        <ol class="steps">
+          <li><div><b>Valoración inicial</b><span>Medidas, composición corporal, movilidad y tus objetivos.</span></div></li>
+          <li><div><b>Plan por escrito</b><span>Rutina adaptada a tu nivel y a los días que puedes venir.</span></div></li>
+          <li><div><b>Sesiones con tu entrenador</b><span>Técnica corregida en cada ejercicio, sin prisas.</span></div></li>
+          <li><div><b>Revisión cada 4 semanas</b><span>Medimos progresos y ajustamos cargas y pautas de alimentación.</span></div></li>
+        </ol>
+        <div class="pt-price">
+          <p>Desde<b id="ptPrecio">25 €</b>por sesión</p>
+          <a class="btn btn--primary" data-wa="Hola, me interesa el entrenamiento personal. ¿Me contáis cómo funciona?" href="#contacto" target="_blank" rel="noopener">Quiero un entrenador</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--alt" id="tarifas">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">Tarifas</p>
+          <h2>Sin permanencia ni letra pequeña</h2>
+        </div>
+      </div>
+      <div class="plans" id="plans"></div>
+      <p class="plans-foot" id="plansFoot"></p>
+    </div>
+  </section>
+
+  <section class="band" id="faq">
+    <div class="wrap faq">
+      <div>
+        <p class="eyebrow">Preguntas frecuentes</p>
+        <h2>Antes de venir</h2>
+        <p class="lead">Si tienes otra duda, escríbenos y te contestamos en el día.</p>
+      </div>
+      <div>
+        <details open><summary>¿De verdad puedo entrenar a cualquier hora?</summary><p>Sí. MASSINFIT abre 24 horas, los 365 días del año, festivos incluidos. Al darte de alta recibes tu acceso personal para entrar cuando quieras.</p></details>
+        <details><summary>Nunca he ido a un gimnasio. ¿Por dónde empiezo?</summary><p>El primer día un entrenador te enseña la sala, te explica las máquinas y te prepara una rutina de inicio. No necesitas experiencia ni estar en forma para empezar.</p></details>
+        <details><summary>¿Puedo probar antes de apuntarme?</summary><p>Sí. El primer día es gratis: puedes usar todas las zonas y probar una clase de crossfit. Avísanos por WhatsApp y te lo preparamos.</p></details>
+        <details><summary>¿Las clases tienen coste aparte?</summary><p>No. Las clases de crossfit del horario están incluidas en cualquier cuota. Solo el entrenamiento personal se paga aparte.</p></details>
+        <details><summary>¿Qué tengo que traer?</summary><p>Ropa deportiva, zapatillas limpias y una toalla para usar en las máquinas y bancos.</p></details>
+        <details><summary>¿Cómo me doy de baja?</summary><p>No hay permanencia en la cuota mensual. Avísanos antes del día 25 y no se te cobra el mes siguiente.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--alt" id="contacto">
+    <div class="wrap contact">
+      <div>
+        <p class="eyebrow">Contacto</p>
+        <h2>Ven a conocernos</h2>
+        <div class="info">
+          <div class="info-row"><span>Teléfono</span>
+            <div class="phone"><a data-tel href="#"><span data-g="telefono">650 154 490</span></a><button class="copy" id="copyTel" type="button">Copiar</button></div>
+          </div>
+          <div class="info-row"><span>Dirección</span>
+            <div><strong data-g="direccion">Calle Ejemplo, 12</strong><br><span style="color:var(--muted)" data-g="localidad">00000 Tu localidad</span></div>
+          </div>
+          <div class="info-row"><span>Horario</span>
+            <div><table class="hours" id="hours"></table></div>
+          </div>
+        </div>
+        <div class="contact-actions">
+          <a class="btn btn--primary" data-wa="Hola, quiero información sobre el gimnasio." href="#contacto" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>
+            WhatsApp
+          </a>
+          <a class="btn btn--ghost" id="mapsBtn" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            Cómo llegar
+          </a>
+        </div>
+      </div>
+      <form class="form" id="waForm" novalidate>
+        <h3>Pide información</h3>
+        <p>Rellena esto y se abre WhatsApp con el mensaje escrito. Solo tienes que darle a enviar.</p>
+        <div class="two">
+          <div class="field"><label for="fNombre">Nombre</label><input id="fNombre" name="nombre" autocomplete="given-name" placeholder="Tu nombre"></div>
+          <div class="field"><label for="fObjetivo">Objetivo</label>
+            <select id="fObjetivo" name="objetivo">
+              <option>Ponerme en forma</option><option>Perder peso</option><option>Ganar masa muscular</option><option>Crossfit</option><option>Entrenamiento personal</option><option>Preparar oposiciones</option>
+            </select></div>
+        </div>
+        <div class="field"><label for="fFranja">¿Cuándo podrías venir?</label>
+          <select id="fFranja" name="franja"><option>Por la mañana</option><option>A mediodía</option><option>Por la tarde</option><option>Por la noche</option><option>Me da igual</option></select></div>
+        <div class="field"><label for="fMsg">Mensaje (opcional)</label><textarea id="fMsg" name="mensaje" placeholder="Cuéntanos lo que quieras"></textarea></div>
+        <p class="preview" id="waPreview" aria-live="polite"></p>
+        <a class="btn btn--primary btn--block" id="waSend" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>
+          Abrir en WhatsApp
+        </a>
+        <p class="legal-note">Tus datos solo se usan para responderte por WhatsApp. No se guardan en esta web.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <p class="foot-big" data-g="nombre">MASSINFIT</p>
+      <small>© <span id="year">2026</span> <span data-g="nombre">MASSINFIT</span> · <span data-g="direccion">Calle Ejemplo, 12</span>, <span data-g="localidad">00000 Tu localidad</span></small>
+    </div>
+    <nav aria-label="Legal">
+      <a id="igLink" href="#" target="_blank" rel="noopener">Instagram</a>
+      <a href="#aviso-legal">Aviso legal</a>
+      <a href="#privacidad">Privacidad</a>
+      <a href="#cookies">Cookies</a>
+    </nav>
+  </div>
+</footer>
+
+<a class="fab" data-wa="Hola, quiero información sobre el gimnasio." href="#contacto" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5z"/><path d="M9 9.5c.3 2 2 3.8 4 4.4l1.2-1.1 1.8.8-.4 1.6c-3.5 0-6.6-3-6.6-6.6l1.6-.4.8 1.8z" fill="currentColor" stroke="none"/></svg>
+  <span>WhatsApp</span>
+</a>
+<div class="demo" id="demoBadge" hidden>Demo · datos de ejemplo</div>
+
+<script>
+/* ============================================================
+   DATOS DEL GIMNASIO — cambia solo este bloque
+   ============================================================ */
+const GYM = {
+  demo: true,                         // pon false para quitar la etiqueta "Demo"
+  nombre: 'MASSINFIT',
+  lema: 'Gimnasio 24 horas · 365 días',
+  telefono: '650 154 490',            // como se muestra
+  whatsapp: '34650154490',            // con prefijo 34, sin espacios ni +
+  direccion: 'Calle Ejemplo, 12',
+  localidad: '00000 Tu localidad',
+  maps: 'https://www.google.com/maps/search/?api=1&query=gimnasio',  // enlace de Google Maps del cliente
+  instagram: 'https://www.instagram.com/',
+  horario: [                          // [días, horas, índices de getDay() a los que aplica]
+    ['Todos los días', '24 horas', [0,1,2,3,4,5,6]],
+    ['Festivos',       'Abierto',  [7]]
+  ],
+  entrenadorDesde: 25,
+  tarifas: [
+    { nombre:'Mensual',    precio:35,  periodo:'/ mes',       nota:'Sin permanencia',       incluye:['Acceso 24/7 a todas las zonas','Clases de crossfit incluidas','Rutina de inicio con entrenador'], top:true, etiqueta:'La más elegida' },
+    { nombre:'Trimestral', precio:95,  periodo:'/ 3 meses',   nota:'31,67 € al mes',        incluye:['Todo lo de la cuota mensual','Valoración física trimestral','Matrícula gratis'] },
+    { nombre:'Anual',      precio:330, periodo:'/ año',       nota:'27,50 € al mes',        incluye:['Todo lo de la trimestral','1 sesión de entrenador personal','Congela tu cuota hasta 1 mes'] }
+  ],
+  notaTarifas: 'Matrícula: 20 € (gratis en trimestral y anual). Estudiantes y mayores de 65: 10 % de descuento presentando acreditación. Precios con IVA incluido.',
+  /* Fotos: pon la ruta de cada imagen (p. ej. 'img/portada.jpg'). Si se deja vacío, se ve el hueco gris. */
+  fotos: { portada:'', personal:'', crossfit:'', maquinas:'', cardio:'' }
+};
+
+const ZONAS = [
+  { id:'crossfit', t:'Crossfit', n:'01', d:'Box con racks, barras olímpicas, discos, kettlebells, cuerdas y estructura para dominadas.', chips:['Racks','Barras olímpicas','Kettlebells'], ic:'M8 14h44M16 14v32M44 14v32M24 46h12M30 30v16' },
+  { id:'maquinas', t:'Máquinas y mancuernas', n:'02', d:'Máquinas guiadas para todos los grupos musculares, bancos regulables y mancuernas de todos los pesos.', chips:['Máquinas guiadas','Bancos','Mancuernas'], ic:'M6 30h48M14 18v24M20 22v16M46 18v24M40 22v16' },
+  { id:'cardio', t:'Cardio', n:'03', d:'Cintas, elípticas y bicis para calentar o hacer tu sesión de cardio a cualquier hora.', chips:['Cintas','Elípticas','Bicis'], ic:'M16 42a8 8 0 1 0 .1 0M44 42a8 8 0 1 0 .1 0M16 42l10-16h14l4 16M26 26l-3-6h-5M40 26l2-6h5' }
+];
+
+const INT = { suave:{c:'var(--p10)', kg:'10', l:'Suave'}, media:{c:'var(--p15)', kg:'15', l:'Media'}, alta:{c:'var(--p20)', kg:'20', l:'Alta'}, maxima:{c:'var(--p25)', kg:'25', l:'Máxima'} };
+
+/* Horario de clases: [hora, clase, minutos, intensidad, sala] */
+const CLASES = {
+  1:[['07:00','WOD',60,'alta','Zona crossfit'],['10:00','Técnica de halterofilia',60,'media','Zona crossfit'],['18:30','WOD',60,'maxima','Zona crossfit'],['20:00','Iniciación',60,'suave','Zona crossfit']],
+  2:[['07:00','WOD',60,'alta','Zona crossfit'],['10:00','Movilidad',45,'suave','Zona crossfit'],['18:30','Gimnásticos',60,'media','Zona crossfit'],['20:00','WOD',60,'maxima','Zona crossfit']],
+  3:[['07:00','WOD',60,'alta','Zona crossfit'],['10:00','Técnica de halterofilia',60,'media','Zona crossfit'],['18:30','WOD',60,'maxima','Zona crossfit'],['20:00','Iniciación',60,'suave','Zona crossfit']],
+  4:[['07:00','WOD',60,'alta','Zona crossfit'],['10:00','Movilidad',45,'suave','Zona crossfit'],['18:30','Gimnásticos',60,'media','Zona crossfit'],['20:00','WOD',60,'maxima','Zona crossfit']],
+  5:[['07:00','WOD',60,'alta','Zona crossfit'],['18:30','WOD por parejas',60,'maxima','Zona crossfit'],['20:00','Movilidad',45,'suave','Zona crossfit']],
+  6:[['10:00','WOD en equipo',75,'maxima','Zona crossfit'],['11:30','Iniciación',60,'suave','Zona crossfit']]
+};
+const DIAS = [[1,'Lun','Lunes'],[2,'Mar','Martes'],[3,'Mié','Miércoles'],[4,'Jue','Jueves'],[5,'Vie','Viernes'],[6,'Sáb','Sábado']];
+
+/* ============================================================ */
+(function(){
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const wa = txt => 'https://wa.me/' + GYM.whatsapp + '?text=' + encodeURIComponent(txt);
+  const eur = n => n.toLocaleString('es-ES', {minimumFractionDigits: n % 1 ? 2 : 0}) ;
+
+  // Textos y enlaces
+  $$('[data-g]').forEach(el => { const v = GYM[el.dataset.g]; if (v) el.textContent = v; });
+  $$('[data-wa]').forEach(el => { el.href = wa(el.dataset.wa); });
+  $$('[data-tel]').forEach(el => { el.href = 'tel:+' + GYM.whatsapp; });
+  $('#mapsBtn').href = GYM.maps;
+  $('#igLink').href = GYM.instagram;
+  $('#year').textContent = new Date().getFullYear();
+  $('#ptPrecio').textContent = GYM.entrenadorDesde + ' €';
+  $('#demoBadge').hidden = !GYM.demo;
+  document.title = GYM.nombre;
+
+  // Cinta
+  const words = ['Abierto 24/7','Crossfit','Máquinas','Mancuernas','Cardio','Entrenamiento personal'];
+  const seq = words.map(w => '<span>' + esc(w) + '</span>').join('');
+  $('#ribbon').innerHTML = seq + seq;
+
+  // Zonas
+  $('#zones').innerHTML = ZONAS.map(z => `
+    <article class="zone">
+      <div class="foto" data-foto="${z.id}" role="img" aria-label="${esc(z.t)}">
+        <div class="pict"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="${z.ic}"/></svg></div>
+        <span class="etq">Foto · ${esc(z.t)}</span>
+      </div>
+      <h3>${esc(z.t)} <small>${z.n}</small></h3>
+      <p>${esc(z.d)}</p>
+      <div class="chips">${z.chips.map(c => '<span class="chip">' + esc(c) + '</span>').join('')}</div>
+    </article>`).join('');
+
+  // Fotos
+  $$('[data-foto]').forEach(el => {
+    const src = GYM.fotos[el.dataset.foto];
+    if (src) { el.style.backgroundImage = 'url("' + src + '")'; el.classList.add('has-img'); }
+  });
+
+  // Leyenda de intensidad
+  $('#legend').innerHTML = Object.values(INT).map(i => `<span><i class="disc" style="background:${i.c}"></i>${i.l} · ${i.kg} kg</span>`).join('');
+
+
+  // Pestañas de días
+  const today = new Date().getDay();
+  let sel = today === 0 ? 1 : today;
+  const daysEl = $('#days');
+  daysEl.innerHTML = DIAS.map(([n, c, l]) => `<button class="day" role="tab" id="d${n}" data-d="${n}" aria-selected="${n===sel}" aria-controls="sched" tabindex="${n===sel?0:-1}">${c}<small>${n===today?'Hoy':CLASES[n].length+' clases'}</small></button>`).join('');
+
+  function renderDay(n){
+    sel = n;
+    $$('.day', daysEl).forEach(b => { const on = +b.dataset.d === n; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; });
+    $('#sched').setAttribute('aria-labelledby', 'd' + n);
+    $('#sched').innerHTML = (CLASES[n] || []).map(([h, c, m, i, s]) => {
+      const it = INT[i];
+      return `<div class="row"><time>${h}</time><div class="cl"><b>${esc(c)}</b><span>${esc(s)}</span></div><span class="dur">${m} min</span><span class="int"><i class="disc" style="background:${it.c}"></i>${it.l}</span></div>`;
+    }).join('');
+  }
+  daysEl.addEventListener('click', e => { const b = e.target.closest('.day'); if (b) renderDay(+b.dataset.d); });
+  daysEl.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const ids = DIAS.map(d => d[0]); let i = ids.indexOf(sel) + (e.key === 'ArrowRight' ? 1 : -1);
+    i = (i + ids.length) % ids.length; renderDay(ids[i]); $('#d' + ids[i]).focus(); e.preventDefault();
+  });
+  renderDay(sel);
+
+  // Tarifas
+  $('#plans').innerHTML = GYM.tarifas.map(p => `
+    <article class="plan${p.top ? ' plan--top' : ''}">
+      ${p.top ? '<span class="tag">' + esc(p.etiqueta || 'Recomendada') + '</span>' : ''}
+      <h3>${esc(p.nombre)}</h3>
+      <div class="price"><b>${eur(p.precio)}€</b><span>${esc(p.periodo)}</span></div>
+      <p class="per">${esc(p.nota)}</p>
+      <ul>${p.incluye.map(x => '<li>' + esc(x) + '</li>').join('')}</ul>
+      <a class="btn ${p.top ? 'btn--primary' : 'btn--ghost'} btn--block" href="${wa('Hola, quiero apuntarme con la cuota ' + p.nombre.toLowerCase() + '.')}" target="_blank" rel="noopener">Apuntarme</a>
+    </article>`).join('');
+  $('#plansFoot').textContent = GYM.notaTarifas;
+
+  // Horario de apertura
+  $('#hours').innerHTML = GYM.horario.map(([d, h, idx]) => `<tr class="${idx.includes(today) ? 'today' : ''}"><td>${esc(d)}</td><td>${esc(h)}</td></tr>`).join('');
+
+  // Copiar teléfono
+  $('#copyTel').addEventListener('click', e => {
+    const btn = e.currentTarget;
+    const done = () => { btn.textContent = 'Copiado'; setTimeout(() => btn.textContent = 'Copiar', 1800); };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents($('[data-tel]')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Seleccionado'; setTimeout(() => btn.textContent = 'Copiar', 1800); };
+    try { navigator.clipboard.writeText(GYM.telefono).then(done, fallback); } catch (_) { fallback(); }
+  });
+
+  // Formulario → WhatsApp
+  const form = $('#waForm');
+  function buildMsg(){
+    const n = $('#fNombre').value.trim(), o = $('#fObjetivo').value, f = $('#fFranja').value.toLowerCase(), m = $('#fMsg').value.trim();
+    let t = 'Hola' + (n ? ', soy ' + n : '') + '. Me interesa ' + o.toLowerCase() + ' y podría venir ' + (f === 'me da igual' ? 'a cualquier hora' : f) + '.';
+    if (m) t += '\n' + m;
+    return t;
+  }
+  function syncForm(){ const t = buildMsg(); $('#waPreview').textContent = t; $('#waSend').href = wa(t); }
+  form.addEventListener('input', syncForm);
+  form.addEventListener('change', syncForm);
+  form.addEventListener('submit', e => e.preventDefault());
+  syncForm();
+
+  // Menú móvil
+  const top = $('#top'), mb = $('#menuBtn');
+  mb.addEventListener('click', () => { const o = top.classList.toggle('open'); mb.setAttribute('aria-expanded', o); mb.setAttribute('aria-label', o ? 'Cerrar menú' : 'Abrir menú'); });
+  $$('#nav a').forEach(a => a.addEventListener('click', () => { top.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); }));
+
+  // Datos estructurados para Google (ficha de negocio local)
+  const ld = document.createElement('script');
+  ld.type = 'application/ld+json';
+  ld.textContent = JSON.stringify({
+    '@context':'https://schema.org', '@type':'ExerciseGym', name:GYM.nombre, telephone:'+' + GYM.whatsapp,
+    address:{ '@type':'PostalAddress', streetAddress:GYM.direccion, addressLocality:GYM.localidad, addressCountry:'ES' },
+    hasMap:GYM.maps, priceRange:'€€',
+    openingHours:['Mo-Su 00:00-23:59']
+  });
+  document.head.appendChild(ld);
+})();
+</script>
+</body>
+</html>
